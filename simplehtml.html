@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="jquery.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var totalArray = [];
+        var autoTotalArray = [];
+        $(document).ready(function() {
+            $("#manual_map").click(function() {
+                var cars = $("#car").val();
+                var models = $("#models").val();
+                mapCarModels(cars, models);
+            });
+
+            $("#auto_map").click(function() {
+                autoMapCarModels();
+            });
+        });
+
+        function mapCarModels(cars, models) {
+            if (!Array.isArray(totalArray[cars])) {
+                totalArray[cars] = [];
+            }
+
+            var flagName = "";
+            for (CarName in totalArray) {
+                var indexFlag = totalArray[CarName].lastIndexOf(models);
+                if (indexFlag > -1) {
+                    flagName = CarName;
+                }
+                console.log(CarName);
+            }
+
+            if (flagName != "") {
+                if (!confirm("Models alredy mapped in" + flagName + "." + "Do you want to Map ? ")) {
+                    return false;
+                } else {
+                    totalArray[flagName].splice(indexFlag, 1);
+                    totalArray[cars].push(models);
+                }
+            } else {
+                totalArray[cars].push(models);
+            }
+            console.log(totalArray);
+        }
+
+        function autoMapCarModels() {
+            var allCar = [];
+            var allModels = [];
+            $("#car option").each(function() {
+                allCar.push($(this).val());
+            });
+
+            $("#models option").each(function() {
+                allModels.push($(this).val());
+            });
+
+            var k = 0;
+            var j = allCar.length;
+            var i = 0;
+            var carModelMap = [];
+            for (i = 0; i < allModels.length; i++) {
+                if (k == j) {
+                    k = 0;
+                }
+                if (!Array.isArray(carModelMap[allCar[k]])) {
+                    carModelMap[allCar[k]] = [];
+                }
+                carModelMap[allCar[k]].push(allModels[i]);
+                k += 1;
+            }
+            console.log(carModelMap);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="table-responsive-sm">
+            <table class="table table-stripped">
+                <tr>
+                    <th class="col-md-4">Cars</th>
+                    <th class="col-md-4">Models</th>
+                    <th class="col-md-4">Operation</th>
+                </tr>
+                <tr class="info center-block">
+                    <td>
+                        <label for="cars">Choose a car:</label>
+                        <select id="car" name="car" class="form-select form-select-sm">
+                                <option value="volvo">Volvo</option>
+                                <option value="saab">Saab</option>
+                                <option value="fiat">Fiat</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                    </td>
+                    <td>
+                        <label for="model">Choose a Model:</label>
+                        <select id="models" name="models" class="form-select form-select-sm">
+                                <option value="s1">S1</option>
+                                <option value="s2">s2</option>
+                                <option value="s3">s3</option>
+                                <option value="s4">s4</option>
+                                <option value="s5">s5</option>
+                                <option value="s6">s6</option>
+                                <option value="s7">s7</option>
+                                <option value="s8">s8</option>
+                                <option value="s9">s9</option>
+                            </select>
+                    </td>
+
+                    <td>
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+                                <span>
+                                        <button
+                                            id="manual_map"
+                                            class="btn btn-primary"
+                                        >
+                                            Manual Map
+                                        </button>
+                                    </span>
+                                <span>
+                                        <button
+                                            id="auto_map"
+                                            class="btn btn-primary"
+                                        >
+                                            Auto Map
+                                        </button>
+                                    </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
